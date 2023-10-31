@@ -1,6 +1,6 @@
 import cv2
 
-cap = cv2.VideoCapture('/dev/video', cv2.CAP_V4L)
+cap = cv2.VideoCapture('/dev/video0', cv2.CAP_V4L)
 while True :
     ret, frame = cap.read()
     if not ret:
