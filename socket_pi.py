@@ -6,7 +6,7 @@ import argparse
 
 # create a socket and bind socket to the host
 parser = argparse.ArgumentParser(description='Press IP adress and Port number')
-parser.add_argument('-ip', type=str ,default = '165.132.138.161')
+parser.add_argument('-ip', type=str ,default = '172.30.1.100')
 parser.add_argument('-port', type=int, default = 9999)
 
 a = parser.parse_args()
