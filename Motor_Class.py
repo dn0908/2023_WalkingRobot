@@ -7,8 +7,8 @@ class Motor_Control:
         self.motor1B = 15  # GPIO 22
 
         # RIGHT MOTOR
-        self.motor2A = 16  # GPIO 23
-        self.motor2B = 18  # GPIO 24
+        self.motor2B = 16  # GPIO 23
+        self.motor2A = 18  # GPIO 24
 
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(self.motor1A, GPIO.OUT)
