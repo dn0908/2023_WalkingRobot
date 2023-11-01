@@ -6,18 +6,21 @@ class Motor_Control:
         # LEFT MOTOR
         self.motor1A = 13  # GPIO 27
         self.motor1B = 15  # GPIO 22
-
         # RIGHT MOTOR
         self.motor2B = 16  # GPIO 23
         self.motor2A = 18  # GPIO 24
+
+        # Set the GPIO pins as outputs
+        GPIO.setup(self.motor1A, GPIO.OUT)
+        GPIO.setup(self.motor1B, GPIO.OUT)
+        GPIO.setup(self.motor2A, GPIO.OUT)
+        GPIO.setup(self.motor2B, GPIO.OUT)
 
         # PWM Settings
         self.PWM_freq = 1000  # PWM feq
         self.left_motor_pwm = GPIO.PWM(self.motor1A, self.PWM_freq)
         self.right_motor_pwm = GPIO.PWM(self.motor2A, self.PWM_freq)
         
-        GPIO.setup(self.motor1B, GPIO.OUT)
-        GPIO.setup(self.motor2B, GPIO.OUT)
 
         self.left_motor_pwm.start(0)
         self.right_motor_pwm.start(0)
