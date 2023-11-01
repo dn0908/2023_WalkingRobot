@@ -15,7 +15,7 @@ class Motor_Control:
         self.left_motor_pwm = GPIO.PWM(self.motor1A, self.PWM_freq)
         self.right_motor_pwm = GPIO.PWM(self.motor2A, self.PWM_freq)
 
-        GPIO.setmode(GPIO.BOARD)
+        GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.motor1B, GPIO.OUT)
         GPIO.setup(self.motor2B, GPIO.OUT)
 
