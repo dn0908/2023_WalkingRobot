@@ -1,42 +1,21 @@
-# see__author__ = 'diana'
-
 import threading
-import SocketServer
-import cv2
-import numpy as np
+import socketserver
 import socket
 
-# img=cv2.imread("frame.jpg",cv2.IMREAD_COLOR)
-# cv2.imshow("TEST IMAGE",img)
-
-class KeyboardControl(SocketServer.BaseRequestHandler):
-    data=" "
-    global img
+class KeyboardControl(socketserver.BaseRequestHandler):
     def handle(self):
-        try:
-            while self.data:
-                key = cv2.waitKey(1) & 0xFF
-                if key==255:
-                    key="No Keyboard Input"
-                elif key==ord('s'):
-                    key="STOP"
-                else:
-                    key=chr(key)
-                self.data = self.request.recv(1024)
-                self.request.sendall(key)
-                keyboard_data = self.data.decode()
-                print(keyboard_data)
-            cv2.destroyAllWindows()
-        finally:
-            print "Connection closed on thread 1"
+        while True:
+            key = input("Enter a command: ")  # Wait for user input
+            self.request.sendall(key.encode())  # Send the command to the Raspberry Pi
 
 class ThreadServer(object):
     def server_thread(host, port):
-        server = SocketServer.TCPServer((host, port), KeyboardControl)
+        server = socketserver.TCPServer((host, port), KeyboardControl)
         server.serve_forever()
-    
-    ip=socket.gethostbyname(socket.getfqdn())
-    keyboard_thread = threading.Thread(target=server_thread(ip, 9999))
+
+    ip = socket.gethostbyname(socket.getfqdn())
+    print(ip)
+    keyboard_thread = threading.Thread(target=server_thread, args=(ip, 9898))
     keyboard_thread.start()
 
 if __name__ == '__main__':
