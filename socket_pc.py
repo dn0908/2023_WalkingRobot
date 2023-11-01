@@ -1,4 +1,4 @@
-see__author__ = 'dahyun'
+# see__author__ = 'diana'
 
 import threading
 import SocketServer
@@ -6,8 +6,8 @@ import cv2
 import numpy as np
 import socket
 
-img=cv2.imread("frame.jpg",cv2.IMREAD_COLOR)
-cv2.imshow("TEST IMAGE",img)
+# img=cv2.imread("frame.jpg",cv2.IMREAD_COLOR)
+# cv2.imshow("TEST IMAGE",img)
 
 class KeyboardControl(SocketServer.BaseRequestHandler):
     data=" "
