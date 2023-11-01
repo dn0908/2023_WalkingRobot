@@ -1,5 +1,6 @@
 import pygame
 from Motor_Class import Motor_Control
+from imports import *
 
 def main():
     pygame.init()
@@ -35,4 +36,5 @@ def main():
     pygame.quit()
 
 if __name__ == "__main__":
+	GPIO.setmode(GPIO.BOARD)
     main()
