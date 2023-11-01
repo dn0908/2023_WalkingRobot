@@ -2,6 +2,7 @@ from imports import *
 
 class Motor_Control:
     def __init__(self):
+        GPIO.setmode(GPIO.BOARD)
         # LEFT MOTOR
         self.motor1A = 13  # GPIO 27
         self.motor1B = 15  # GPIO 22
@@ -14,8 +15,7 @@ class Motor_Control:
         self.PWM_freq = 1000  # PWM feq
         self.left_motor_pwm = GPIO.PWM(self.motor1A, self.PWM_freq)
         self.right_motor_pwm = GPIO.PWM(self.motor2A, self.PWM_freq)
-
-        GPIO.setmode(GPIO.BCM)
+        
         GPIO.setup(self.motor1B, GPIO.OUT)
         GPIO.setup(self.motor2B, GPIO.OUT)
 
