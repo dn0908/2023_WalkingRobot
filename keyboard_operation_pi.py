@@ -8,8 +8,8 @@ def main():
     motor_controller = Motor_Control()
 
     # Initialize pygame
-    pygame.init()
     screen = pygame.display.set_mode((100, 100))
+    pygame.display.set_caption("Robot Control")
 
     # Main loop
     running = True
