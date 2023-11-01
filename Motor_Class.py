@@ -28,14 +28,14 @@ class Motor_Control:
     def go_forward(self, speed=50):
         self.left_motor_pwm.ChangeDutyCycle(speed)
         self.right_motor_pwm.ChangeDutyCycle(speed)
-        GPIO.output(self.motor1B, GPIO.LOW)
-        GPIO.output(self.motor2B, GPIO.LOW)
+        GPIO.output(self.motor1B, GPIO.HIGH)
+        GPIO.output(self.motor2B, GPIO.HIGH)
 
     def go_backward(self, speed=50):
         self.left_motor_pwm.ChangeDutyCycle(speed)
         self.right_motor_pwm.ChangeDutyCycle(speed)
-        GPIO.output(self.motor1B, GPIO.HIGH)
-        GPIO.output(self.motor2B, GPIO.HIGH)
+        GPIO.output(self.motor1B, GPIO.LOW)
+        GPIO.output(self.motor2B, GPIO.LOW)
 
     def turn_left(self, speed=50):
         self.left_motor_pwm.ChangeDutyCycle(speed)
