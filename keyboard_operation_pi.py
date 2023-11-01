@@ -37,4 +37,4 @@ def main():
 
 if __name__ == "__main__":
 	GPIO.setmode(GPIO.BOARD)
-    main()
+	main()
