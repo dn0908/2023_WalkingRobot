@@ -1,9 +1,11 @@
 import time
 import RPi.GPIO as GPIO
 
-motor1A = 23 #GPIO 11
-motor1B = 21 #GPIO 9
+# LEFT MOTOR
+motor1A = 13 #GPIO 27
+motor1B = 15 #GPIO 22
 
+# RIGHT MOTOR
 motor2A = 16 #GPIO 23
 motor2B = 18 #GPIO 24
 
@@ -15,9 +17,9 @@ GPIO.setup(motor2B, GPIO.OUT)
 
 GPIO.output(motor1A, GPIO.HIGH)
 GPIO.output(motor1B, GPIO.LOW)
-GPIO.output(motor2A, GPIO.HIGH)
-GPIO.output(motor2B, GPIO.LOW)
-time.sleep(5)
+# GPIO.output(motor2A, GPIO.HIGH)
+# GPIO.output(motor2B, GPIO.LOW)
+time.sleep(1)
 
 print('end')
 GPIO.output(motor1A, GPIO.LOW)
