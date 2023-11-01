@@ -17,13 +17,17 @@ def measure():
         elapsed = stop-start
         distance = (elapsed * 34300)/2
         return distance
+
 GPIO.setmode(GPIO.BOARD)
+
 GPIO_TRIGGER = 11 #GPIO 17
 GPIO_ECHO = 22 #GPIO 25
+
 GPIO.setup(GPIO_TRIGGER,GPIO.OUT)
 GPIO.setup(GPIO_ECHO,GPIO.IN)
 GPIO.output(GPIO_TRIGGER, False)
 time.sleep(.1)
+
 for i in range(10):
     print(measure())
     time.sleep(0.5)
