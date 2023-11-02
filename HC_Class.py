@@ -2,7 +2,7 @@ import RPi.GPIO as GPIO
 import time
 
 class HC_SR04:
-    def __init__(self, GPIO_ECHO):
+    def __init__(self):
         # GPIO_TRIGGER = 11  # GPIO 17
         # GPIO_ECHO = 22  # GPIO 25
 
