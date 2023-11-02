@@ -42,9 +42,6 @@ class HC_SR04:
 
 
 if __name__ == '__main__':
-    GPIO_TRIGGER = 11  # GPIO 17
-    GPIO_ECHO = 22  # GPIO 25
-
     try:
         sensor = HC_SR04()
         while True:
