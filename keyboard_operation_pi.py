@@ -52,8 +52,6 @@ def main():
                 elif event.key == pygame.K_SPACE:
                     space_pressed = False
 
-        if not space_pressed:
-            motor_controller.resume()
 
     # Cleanup and exit
     motor_controller.stop()

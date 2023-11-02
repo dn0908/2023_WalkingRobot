@@ -53,11 +53,11 @@ class Motor_Control:
         self.left_motor_pwm.ChangeDutyCycle(0)
         self.right_motor_pwm.ChangeDutyCycle(0)
 
-    def resume(self, speed=50):
-        self.left_motor_pwm.ChangeDutyCycle(speed)
-        self.right_motor_pwm.ChangeDutyCycle(speed)
-        GPIO.output(self.motor1B, GPIO.HIGH)
-        GPIO.output(self.motor2B, GPIO.HIGH)
+    # def resume(self, speed=50):
+    #     self.left_motor_pwm.ChangeDutyCycle(speed)
+    #     self.right_motor_pwm.ChangeDutyCycle(speed)
+    #     GPIO.output(self.motor1B, GPIO.HIGH)
+    #     GPIO.output(self.motor2B, GPIO.HIGH)
 
     def cleanup(self):
         GPIO.cleanup()
