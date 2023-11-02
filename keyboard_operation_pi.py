@@ -14,6 +14,8 @@ def main():
     left_key_pressed = False
     right_key_pressed = False
 
+    space_pressed = False
+
     # Main loop
     running = True
     while running:
@@ -33,6 +35,9 @@ def main():
                 elif event.key == pygame.K_RIGHT and not right_key_pressed:
                     motor_controller.turn_right(50)
                     right_key_pressed = True
+                elif event.key == pygame.K_SPACE:  # Spacebar : stop motor
+                    motor_controller.stop()
+                    space_pressed = True
                 elif event.key == pygame.K_q:  # Quit program when 'Q' key pressed
                     running = False
             elif event.type == pygame.KEYUP:
@@ -44,6 +49,11 @@ def main():
                     left_key_pressed = False
                 elif event.key == pygame.K_RIGHT:
                     right_key_pressed = False
+                elif event.key == pygame.K_SPACE:
+                    space_pressed = False
+
+        if not space_pressed:
+            motor_controller.resume()
 
     # Cleanup and exit
     motor_controller.stop()
