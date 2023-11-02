@@ -46,7 +46,7 @@ if __name__ == '__main__':
         sensor = HC_SR04()
         while True:
             distance = sensor.hc_get_distance()
-            print("거리: {:.2f} cm".format(distance))
+            print("distance: {:.2f} cm".format(distance))
             time.sleep(1)
 
     except KeyboardInterrupt:
