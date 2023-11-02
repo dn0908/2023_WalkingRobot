@@ -24,10 +24,10 @@ def main():
                 running = False
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP and not up_key_pressed:
-                    motor_controller.go_forward(20)
+                    motor_controller.go_forward(10)
                     up_key_pressed = True
                 elif event.key == pygame.K_DOWN and not down_key_pressed:
-                    motor_controller.go_backward(20)
+                    motor_controller.go_backward(10)
                     down_key_pressed = True
                 elif event.key == pygame.K_LEFT and not left_key_pressed:
                     motor_controller.turn_left(20)
