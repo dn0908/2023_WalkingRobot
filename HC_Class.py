@@ -3,13 +3,9 @@ import time
 
 class HC_SR04:
     def __init__(self):
-        # GPIO_TRIGGER = 11  # GPIO 17
-        # GPIO_ECHO = 22  # GPIO 25
         GPIO.setmode(GPIO.BOARD)
         self.GPIO_TRIGGER = 11
         self.GPIO_ECHO = 22
-
-        #GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.GPIO_TRIGGER, GPIO.OUT)
         GPIO.setup(self.GPIO_ECHO, GPIO.IN)
 

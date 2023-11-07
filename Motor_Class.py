@@ -28,36 +28,53 @@ class Motor_Control:
     def go_forward(self, speed=100):
         self.left_motor_pwm.ChangeDutyCycle(speed)
         self.right_motor_pwm.ChangeDutyCycle(speed)
+        # L +
+        GPIO.output(self.motor1A, GPIO.LOW)
         GPIO.output(self.motor1B, GPIO.HIGH)
-        GPIO.output(self.motor2B, GPIO.HIGH)
+        # R +
+        GPIO.output(self.motor2A, GPIO.HIGH)
+        GPIO.output(self.motor2B, GPIO.LOW)
 
     def go_backward(self, speed=100):
         self.left_motor_pwm.ChangeDutyCycle(speed)
         self.right_motor_pwm.ChangeDutyCycle(speed)
+        # L -
+        GPIO.output(self.motor1A, GPIO.HIGH)
         GPIO.output(self.motor1B, GPIO.LOW)
-        GPIO.output(self.motor2B, GPIO.LOW)
+        # R -
+        GPIO.output(self.motor2A, GPIO.LOW)
+        GPIO.output(self.motor2B, GPIO.HIGH)
 
     def turn_left(self, speed=100):
         self.left_motor_pwm.ChangeDutyCycle(speed)
         self.right_motor_pwm.ChangeDutyCycle(speed)
+        # L +
+        GPIO.output(self.motor1A, GPIO.LOW)
         GPIO.output(self.motor1B, GPIO.HIGH)
-        GPIO.output(self.motor2B, GPIO.LOW)
+        # R -
+        GPIO.output(self.motor2A, GPIO.LOW)
+        GPIO.output(self.motor2B, GPIO.HIGH)
 
     def turn_right(self, speed=100):
         self.left_motor_pwm.ChangeDutyCycle(speed)
         self.right_motor_pwm.ChangeDutyCycle(speed)
+        # L -
+        GPIO.output(self.motor1A, GPIO.HIGH)
         GPIO.output(self.motor1B, GPIO.LOW)
-        GPIO.output(self.motor2B, GPIO.HIGH)
+        # R +
+        GPIO.output(self.motor2A, GPIO.HIGH)
+        GPIO.output(self.motor2B, GPIO.LOW)
 
     def stop(self):
         self.left_motor_pwm.ChangeDutyCycle(0)
         self.right_motor_pwm.ChangeDutyCycle(0)
+        # L 0
+        GPIO.output(self.motor1A, GPIO.LOW)
+        GPIO.output(self.motor1B, GPIO.LOW)
+        # R 0
+        GPIO.output(self.motor2A, GPIO.LOW)
+        GPIO.output(self.motor2B, GPIO.LOW)
 
-    # def resume(self, speed=50):
-    #     self.left_motor_pwm.ChangeDutyCycle(speed)
-    #     self.right_motor_pwm.ChangeDutyCycle(speed)
-    #     GPIO.output(self.motor1B, GPIO.HIGH)
-    #     GPIO.output(self.motor2B, GPIO.HIGH)
 
     def cleanup(self):
         GPIO.cleanup()
