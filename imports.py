@@ -3,4 +3,4 @@ import argparse
 import os
 import time
 import RPi.GPIO as GPIO
-import keyboard
+from pynput import keyboard

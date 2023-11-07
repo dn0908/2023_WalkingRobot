@@ -17,57 +17,57 @@ class Motor_Control:
         GPIO.setup(self.motor2B, GPIO.OUT)
 
         # PWM Settings
-        self.PWM_freq = 5000  # PWM feq
-        self.left_motor_pwm = GPIO.PWM(self.motor1A, self.PWM_freq)
-        self.right_motor_pwm = GPIO.PWM(self.motor2A, self.PWM_freq)
+        # self.PWM_freq = 5000  # PWM feq
+        # self.left_motor_pwm = GPIO.PWM(self.motor1A, self.PWM_freq)
+        # self.right_motor_pwm = GPIO.PWM(self.motor2A, self.PWM_freq)
         
 
-        self.left_motor_pwm.start(0)
-        self.right_motor_pwm.start(0)
+        # self.left_motor_pwm.start(0)
+        # self.right_motor_pwm.start(0)
 
     def go_forward(self, speed=100):
-        self.left_motor_pwm.ChangeDutyCycle(speed)
-        self.right_motor_pwm.ChangeDutyCycle(speed)
+        # self.left_motor_pwm.ChangeDutyCycle(speed)
+        # self.right_motor_pwm.ChangeDutyCycle(speed)
         # L +
         GPIO.output(self.motor1A, GPIO.LOW)
         GPIO.output(self.motor1B, GPIO.HIGH)
         # R +
-        GPIO.output(self.motor2A, GPIO.HIGH)
-        GPIO.output(self.motor2B, GPIO.LOW)
+        GPIO.output(self.motor2A, GPIO.LOW)
+        GPIO.output(self.motor2B, GPIO.HIGH)
 
     def go_backward(self, speed=100):
-        self.left_motor_pwm.ChangeDutyCycle(speed)
-        self.right_motor_pwm.ChangeDutyCycle(speed)
+        # self.left_motor_pwm.ChangeDutyCycle(speed)
+        # self.right_motor_pwm.ChangeDutyCycle(speed)
         # L -
         GPIO.output(self.motor1A, GPIO.HIGH)
         GPIO.output(self.motor1B, GPIO.LOW)
         # R -
-        GPIO.output(self.motor2A, GPIO.LOW)
-        GPIO.output(self.motor2B, GPIO.HIGH)
+        GPIO.output(self.motor2A, GPIO.HIGH)
+        GPIO.output(self.motor2B, GPIO.LOW)
 
     def turn_left(self, speed=100):
-        self.left_motor_pwm.ChangeDutyCycle(speed)
-        self.right_motor_pwm.ChangeDutyCycle(speed)
+        # self.left_motor_pwm.ChangeDutyCycle(speed)
+        # self.right_motor_pwm.ChangeDutyCycle(speed)
         # L +
         GPIO.output(self.motor1A, GPIO.LOW)
         GPIO.output(self.motor1B, GPIO.HIGH)
         # R -
-        GPIO.output(self.motor2A, GPIO.LOW)
-        GPIO.output(self.motor2B, GPIO.HIGH)
+        GPIO.output(self.motor2A, GPIO.HIGH)
+        GPIO.output(self.motor2B, GPIO.LOW)
 
     def turn_right(self, speed=100):
-        self.left_motor_pwm.ChangeDutyCycle(speed)
-        self.right_motor_pwm.ChangeDutyCycle(speed)
+        # self.left_motor_pwm.ChangeDutyCycle(speed)
+        # self.right_motor_pwm.ChangeDutyCycle(speed)
         # L -
         GPIO.output(self.motor1A, GPIO.HIGH)
         GPIO.output(self.motor1B, GPIO.LOW)
         # R +
-        GPIO.output(self.motor2A, GPIO.HIGH)
-        GPIO.output(self.motor2B, GPIO.LOW)
+        GPIO.output(self.motor2A, GPIO.LOW)
+        GPIO.output(self.motor2B, GPIO.HIGH)
 
     def stop(self):
-        self.left_motor_pwm.ChangeDutyCycle(0)
-        self.right_motor_pwm.ChangeDutyCycle(0)
+        # self.left_motor_pwm.ChangeDutyCycle(speed)
+        # self.right_motor_pwm.ChangeDutyCycle(speed)
         # L 0
         GPIO.output(self.motor1A, GPIO.LOW)
         GPIO.output(self.motor1B, GPIO.LOW)

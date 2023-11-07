@@ -30,10 +30,10 @@ def main():
                     motor_controller.go_backward(100)
                     down_key_pressed = True
                 elif event.key == pygame.K_LEFT and not left_key_pressed:
-                    motor_controller.turn_left(100)
+                    motor_controller.turn_right(100)
                     left_key_pressed = True
                 elif event.key == pygame.K_RIGHT and not right_key_pressed:
-                    motor_controller.turn_right(100)
+                    motor_controller.turn_left(100)
                     right_key_pressed = True
                 elif event.key == pygame.K_SPACE:  # Spacebar : stop motor
                     motor_controller.stop()
