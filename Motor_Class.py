@@ -17,7 +17,7 @@ class Motor_Control:
         GPIO.setup(self.motor2B, GPIO.OUT)
 
         # PWM Settings
-        self.PWM_freq = 1000  # PWM feq
+        self.PWM_freq = 5000  # PWM feq
         self.left_motor_pwm = GPIO.PWM(self.motor1A, self.PWM_freq)
         self.right_motor_pwm = GPIO.PWM(self.motor2A, self.PWM_freq)
         
@@ -25,25 +25,25 @@ class Motor_Control:
         self.left_motor_pwm.start(0)
         self.right_motor_pwm.start(0)
 
-    def go_forward(self, speed=50):
+    def go_forward(self, speed=100):
         self.left_motor_pwm.ChangeDutyCycle(speed)
         self.right_motor_pwm.ChangeDutyCycle(speed)
         GPIO.output(self.motor1B, GPIO.HIGH)
         GPIO.output(self.motor2B, GPIO.HIGH)
 
-    def go_backward(self, speed=50):
+    def go_backward(self, speed=100):
         self.left_motor_pwm.ChangeDutyCycle(speed)
         self.right_motor_pwm.ChangeDutyCycle(speed)
         GPIO.output(self.motor1B, GPIO.LOW)
         GPIO.output(self.motor2B, GPIO.LOW)
 
-    def turn_left(self, speed=50):
+    def turn_left(self, speed=100):
         self.left_motor_pwm.ChangeDutyCycle(speed)
         self.right_motor_pwm.ChangeDutyCycle(speed)
         GPIO.output(self.motor1B, GPIO.HIGH)
         GPIO.output(self.motor2B, GPIO.LOW)
 
-    def turn_right(self, speed=50):
+    def turn_right(self, speed=100):
         self.left_motor_pwm.ChangeDutyCycle(speed)
         self.right_motor_pwm.ChangeDutyCycle(speed)
         GPIO.output(self.motor1B, GPIO.LOW)
@@ -66,15 +66,15 @@ if __name__ == "__main__":
     Motor_Control = Motor_Control()
     print('Go')
     Motor_Control.go_forward(100)
-    time.sleep(5)
-    print('Back')
-    Motor_Control.go_backward(100)
-    time.sleep(5)
-    print('turning LEFT ...')
-    Motor_Control.turn_left(100)
-    time.sleep(5)
-    print('turning RIGHT ...')
-    Motor_Control.turn_right(100)
-    time.sleep(5)
+    time.sleep(10)
+    #print('Back')
+    #Motor_Control.go_backward(100)
+    #time.sleep(5)
+    #print('turning LEFT ...')
+    #Motor_Control.turn_left(100)
+    #time.sleep(5)
+    #print('turning RIGHT ...')
+    #Motor_Control.turn_right(100)
+    #time.sleep(5)
     Motor_Control.stop()
     print('stopped')

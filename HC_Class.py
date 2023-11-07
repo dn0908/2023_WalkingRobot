@@ -5,11 +5,11 @@ class HC_SR04:
     def __init__(self):
         # GPIO_TRIGGER = 11  # GPIO 17
         # GPIO_ECHO = 22  # GPIO 25
-
+        GPIO.setmode(GPIO.BOARD)
         self.GPIO_TRIGGER = 11
         self.GPIO_ECHO = 22
 
-        GPIO.setmode(GPIO.BCM)
+        #GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.GPIO_TRIGGER, GPIO.OUT)
         GPIO.setup(self.GPIO_ECHO, GPIO.IN)
 
@@ -47,7 +47,7 @@ if __name__ == '__main__':
         while True:
             distance = sensor.hc_get_distance()
             print("distance: {:.2f} cm".format(distance))
-            time.sleep(1)
+            time.sleep(0.05)
 
     except KeyboardInterrupt:
         sensor.cleanup()
