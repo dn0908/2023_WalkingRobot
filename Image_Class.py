@@ -1,8 +1,12 @@
 from imports import *
 global flag
 
+
 class Image_Processing():
-    def first_nonzero(arr, axis, invalid_val=-1):
+    def __init__(self):
+        self.flag = 0
+
+    def first_nonzero(self, arr, axis, invalid_val=-1):
         arr = np.flipud(arr)
         mask = arr!=0
         return np.where(mask.any(axis=axis), mask.argmax(axis=axis), invalid_val)
@@ -19,21 +23,26 @@ class Image_Processing():
         
         return red_mask, min_pool
 
-    def crop(img,dx,dy):
+    def crop(self, img,dx,dy):
         y,x,z = img.shape
         startx = x//2-(dx)
         starty = y-(dy)
         return img[starty:y,startx:startx+2*dx]
         
     # change white & black with threshold
-    def select_white(image, white):
+    def select_white(self, image, white):
         lower = np.array([white,white,white])
         upper = np.array([255,255,255])
         white_mask = cv2.inRange(image, lower, upper)
         return white_mask
 
     # integration path algorithm, returns final action and integrated numbers
-    def set_path1(image, upper_limit, fixed_center = 'False'):
+    '''
+    flag = 0 for just driving 
+    flag = 1 for stopsign detection
+    # flag = 2 for ar marker detection
+    '''
+    def set_path1(self, image, upper_limit, fixed_center = 'False'):
         height, width = image.shape # shape of array ex) 240,320
         height = height-1 # array starts from 0, so the last num is 319, not 320
         width = width-1
@@ -127,14 +136,17 @@ class Image_Processing():
         return result, forward_sum, left_sum, right_sum
     
 if __name__ == "__main__":
+    Image = Image_Processing()
     cap = cv2.VideoCapture('/dev/video0', cv2.CAP_V4L)
     while True :
         ret, frame = cap.read()
         if not ret:
             print('failed to grab frame ...')
             continue
-        
-        cv2.imshow('camera test', frame)
+        crop = Image.crop(frame,160,120)
+        white_mask = Image.select_white(crop, 140)
+        cv2.imshow('white test', white_mask)
+        cv2.imshow('original', crop)
         if cv2.waitKey(500) == ord('q'):
             break
     cap.release()
