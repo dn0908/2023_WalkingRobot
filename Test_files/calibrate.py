@@ -3,8 +3,8 @@ import cv2
 import pickle
 import glob
 
-CAMERA_WIDTH = 1280
-CAMERA_HEIGHT = 720
+CAMERA_WIDTH = 640
+CAMERA_HEIGHT = 480
 
 chessboardSize = (10, 7)
 frameSize = (CAMERA_WIDTH, CAMERA_HEIGHT)
