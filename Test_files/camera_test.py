@@ -16,7 +16,14 @@ while True :
         continue
     
     cv2.imshow('camera test', frame)
-    if cv2.waitKey(500) == ord('q'):
+    # if cv2.waitKey(500) == ord('q'):
+    #     break
+    key = cv2.waitKey(1)
+    if key == 27:  # Press 'Esc' to exit
+        break
+    elif key == 32:  # Press 'Space' to capture and calibrate
+        cv2.imwrite('output08.png', frame)
+        print("save successful!")
         break
 cap.release()
 cv2.destroyAllWindows()
