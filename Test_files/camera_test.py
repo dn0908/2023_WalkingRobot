@@ -1,4 +1,5 @@
 import cv2
+from random import *
 
 cap = cv2.VideoCapture('/dev/video0', cv2.CAP_V4L)
 width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
@@ -22,8 +23,10 @@ while True :
     if key == 27:  # Press 'Esc' to exit
         break
     elif key == 32:  # Press 'Space' to capture and calibrate
-        cv2.imwrite('1124_02.png', frame)
-        print("save successful!")
-        break
+        i = randint(1, 100)
+        filename = f'{i}.png'
+        cv2.imwrite(filename, frame)
+        print(filename, "save successful!")
+        # break
 cap.release()
 cv2.destroyAllWindows()
