@@ -89,7 +89,7 @@ class Image_Processing():
         forward_sum = np.sum(white_distance[center-10:center+10])
         # print("left sum : %f   right sum : %f   forward sum : %f", left_sum, right_sum, forward_sum)
         
-        if flag == 0:
+        if self.flag == 0:
             if left_sum > right_sum + 600: 
                 result = 'left'
             elif left_sum < right_sum - 600:
@@ -106,7 +106,7 @@ class Image_Processing():
             else: 
                 result = 'backward'
     #     
-        if flag == 1:
+        if self.flag == 1:
             if left_sum > right_sum + 600: 
                     result = 'left'
             elif left_sum < right_sum - 600:
@@ -123,7 +123,7 @@ class Image_Processing():
             else: 
                 result = 'backward'
         
-        if flag == 2:
+        if self.flag == 2:
             if left_sum > right_sum + 600: 
                     result = 'left'
             elif left_sum < right_sum - 600:
@@ -146,35 +146,37 @@ class Image_Processing():
     # =====================================================================================
     # P control -> constrained P control mod. needed
     # output is amount of dutycycle to reduce -> (fullspeed - output) is needed
-    def ctrl(self, result, forward_sum, left_sum, right_sum):  
+    # def ctrl(self, result, forward_sum, left_sum, right_sum):  
 
-        global KP
-        global KI
-        global KD
-        global limit
-        global output_min
+    #     global KP
+    #     global KI
+    #     global KD
+    #     global limit
+    #     global output_min
 
-        if result == 'left':
-            err = left_sum - right_sum
-        elif result == 'right':
-            err = right_sum - left_sum
-        else:
-            err = 0
+    #     if result == 'left':
+    #         err = left_sum - right_sum
+    #     elif result == 'right':
+    #         err = right_sum - left_sum
+    #     else:
+    #         err = 0
             
-        P_err = KP * err
-        I_err += KI * ((err + pre_err) / 2) * LOOPTIME
-        D_err = KD * (err - pre_err) / LOOPTIME
-        if (I_err > I_err_limit) I_err = I_err_limit
-        else if (I_err < -I_err_limit) I_err = -I_err_limit
-        output = abs(P_err + I_err + D_err)
-        output = abs(P_err)
+    #     P_err = KP * err
+    #     I_err += KI * ((err + pre_err) / 2) * LOOPTIME
+    #     D_err = KD * (err - pre_err) / LOOPTIME
+    #     if (I_err > I_err_limit) :
+    #         I_err = I_err_limit
+    #     if (I_err < -I_err_limit):
+    #         I_err = -I_err_limit
+    #     output = abs(P_err + I_err + D_err)
+    #     output = abs(P_err)
 
-        if output >= limit :
-            output = limit
-        if output < output_min:
-            output = output_min
+    #     if output >= limit :
+    #         output = limit
+    #     if output < output_min:
+    #         output = output_min
 
-        return output
+    #     return output
     
 if __name__ == "__main__":
     flag =1
@@ -198,8 +200,8 @@ if __name__ == "__main__":
         # center = int(width/2)
         result, forward_sum, left_sum, right_sum = Image.set_path1(crop, 120)
         print('result : ',result)
-        ctrl_output = Image.ctrl(result, forward_sum, left_sum, right_sum)
-        print("RESULT :      ",ctrl_output)
+        #ctrl_output = Image.ctrl(result, forward_sum, left_sum, right_sum)
+        #print("RESULT :      ",ctrl_output)
         cv2.imshow('white test', white_mask)
         cv2.imshow('original', crop)
         if cv2.waitKey(500) == ord('q'):
