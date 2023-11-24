@@ -14,7 +14,7 @@ criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 objp = np.zeros((chessboardSize[0] * chessboardSize[1], 3), np.float32)
 objp[:, :2] = np.mgrid[0:chessboardSize[0], 0:chessboardSize[1]].T.reshape(-1, 2)
 
-size_of_chessboard_squares_mm = 20
+size_of_chessboard_squares_mm = 6
 objp = objp * size_of_chessboard_squares_mm
 
 objpoints = []
@@ -32,9 +32,9 @@ while True:
         corners2 = cv2.cornerSubPix(gray, corners, (11, 11), (-1, -1), criteria)
         objpoints.append(objp)
         imgpoints.append(corners)
-
-        cv2.drawChessboardCorners(frame, chessboardSize, corners2, ret)
-        cv2.imshow('Webcam Calibration', frame)
+        frame2 = frame
+        cv2.drawChessboardCorners(frame2, chessboardSize, corners2, ret)
+        cv2.imshow('Webcam Calibration', frame2)
 
     key = cv2.waitKey(1)
     if key == 27:  # Press 'Esc' to exit
@@ -42,7 +42,13 @@ while True:
     elif key == 32:  # Press 'Space' to capture and calibrate
         ret, cameraMatrix, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, frameSize, None, None)
         print("Calibration successful!")
+        w = 640
+        h = 480
+        newCameraMtx, roi = cv2.getOptimalNewCameraMatrix(cameraMatrix, dist, (w, h), 1, (w, h))
+        undistortedImg = cv2.undistort(frame, cameraMatrix, dist, None, newCameraMtx)
+        cv2.imwrite('undist.png', undistortedImg)
         break
+    
 
 cap.release()
 cv2.destroyAllWindows()
