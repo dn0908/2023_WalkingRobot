@@ -23,7 +23,7 @@ while True :
     if key == 27:  # Press 'Esc' to exit
         break
     elif key == 32:  # Press 'Space' to capture and calibrate
-        i = randint(1, 100)
+        i = randint(201, 300)
         filename = f'{i}.png'
         cv2.imwrite(filename, frame)
         print(filename, "save successful!")
