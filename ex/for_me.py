@@ -6,10 +6,21 @@ import cv2
 import numpy as np
 import time
 #from timer import Timer
-from ar_markers import detect_markers
+
 from skimage.measure import block_reduce
 # from picamera import PiCamera
 # from picamera.array import PiRGBArray
+
+from __future__ import print_function
+import sys
+sys.path.insert(0, '/home/diana/2023_WalkingRobot/ar_detection')
+
+try:
+	import cv2
+	from ar_detection.detect import * #
+
+except ImportError:
+	raise Exception('[ERROR] Import Error, Check Path...')
 
 global flag
 
@@ -19,10 +30,10 @@ global flag
 # =====================================================================================
 
 # Path of train weights and lables 
-labelsPath = "./edison.names"
+labelsPath = "/home/diana/2023_WalkingRobot/ex/edison.names"
 LABELS = open(labelsPath).read().strip().split("\n")
-weightsPath = "2nd_final.weights"
-configPath = "./edison.cfg"
+weightsPath = "/home/diana/2023_WalkingRobot/ex/2nd_final.weights"
+configPath = "/home/diana/2023_WalkingRobot/ex/edison.cfg"
 
 # Loading the neural network
 net = cv2.dnn.readNetFromDarknet(configPath,weightsPath)
@@ -390,12 +401,12 @@ def parking():
 # =====================================================================================
 # ==============================         SETUP          ===============================
 # =====================================================================================
-# LEFT MOTOR
-self.motor1A = 13  # GPIO 27
-self.motor1B = 15  # GPIO 22
-# RIGHT MOTOR
-self.motor2B = 16  # GPIO 23
-self.motor2A = 18  # GPIO 24
+# # LEFT MOTOR
+# self.motor1A = 13  # GPIO 27
+# self.motor1B = 15  # GPIO 22
+# # RIGHT MOTOR
+# self.motor2B = 16  # GPIO 23
+# self.motor2A = 18  # GPIO 24
 
 motor1A = 13
 motor1B = 15
