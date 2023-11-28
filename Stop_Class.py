@@ -97,7 +97,7 @@ class Stop:
             # flag =+ 1
             # stop_flag =+ 1
             print('STOP detected')
-            flag = 1
+            
             # print(flag)
             # if stopsign detected, stop for 5secs
             # stop5()
@@ -115,7 +115,7 @@ class Stop:
     #             text = 'labels: '+ str(self.LABELS[classIDs[i]])+'//'+ str(confidences[i])
     #             cv2.putText(image, text, (10, 140), cv2.FONT_HERSHEY_SIMPLEX,1, (255,255,255), 2)
         
-        return image, flag
+        return image
 
 
 if __name__ == '__main__':

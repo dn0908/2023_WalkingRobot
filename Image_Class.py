@@ -12,16 +12,16 @@ class Image_Processing():
         return np.where(mask.any(axis=axis), mask.argmax(axis=axis), invalid_val)
 
     # detect red
-    def red_image(image):
+    def red_image(self, image, red_min=140):
         # red_detection = 'no_red'
         hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)    
-        lower_range = np.array([150,150,0], dtype=np.uint8)
+        lower_range = np.array([red_min,red_min,0], dtype=np.uint8)
         upper_range = np.array([180,255,255], dtype=np.uint8)
         red_mask = cv2.inRange(hsv, lower_range, upper_range)
         
         min_pool=block_reduce(red_mask, block_size=(2,2), func=np.min)
         
-        return red_mask, min_pool
+        return red_mask #, min_pool
 
     def crop(self, img,dx,dy):
         y,x,z = img.shape
@@ -195,13 +195,16 @@ if __name__ == "__main__":
             print('failed to grab frame ...')
             continue
         crop = Image.crop(frame,160,120)
-        white_mask = Image.select_white(crop, 140)
+        white_mask = Image.select_white(crop, 100)
+        red_mask = Image.red_image(crop, 130)
+        
         # height, width = white_mask.shape
         # center = int(width/2)
         result, forward_sum, left_sum, right_sum = Image.set_path1(crop, 120)
         print('result : ',result)
         #ctrl_output = Image.ctrl(result, forward_sum, left_sum, right_sum)
         #print("RESULT :      ",ctrl_output)
+        cv2.imshow('red test', red_mask)
         cv2.imshow('white test', white_mask)
         cv2.imshow('original', crop)
         if cv2.waitKey(500) == ord('q'):
