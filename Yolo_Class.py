@@ -7,8 +7,8 @@ class Yolo:
         print(f"[INFO] Loading model... ")
         ## loading the custom trained model
         # model =  torch.hub.load('ultralytics/yolov5', 'custom', path='last.pt',force_reload=True) ## if you want to download the git repo and then run the detection
-        model =  torch.hub.load('/home/diana/2023_WalkingRobot/yolov5', 'custom', source ='local', path='best.pt',force_reload=True) ### The repo is stored locally
-        classes = model.names ### class names in string
+        # model =  torch.hub.load('/home/diana/2023_WalkingRobot/yolov5', 'custom', source ='local', path='best.pt',force_reload=True) ### The repo is stored locally
+        # classes = model.names ### class names in string
 
     def detect_(frame, model):
         frame = [frame]
@@ -49,15 +49,16 @@ class Yolo:
 
 if __name__ == "__main__":
     yolo = Yolo()
+    
+    print(f"[INFO] Loading model... ")
+    ## loading the custom trained model
+    # model =  torch.hub.load('ultralytics/yolov5', 'custom', path='last.pt',force_reload=True) ## if you want to download the git repo and then run the detection
+    model =  torch.hub.load('yolov5', 'custom', source ='local', path='best.pt',force_reload=True) ### The repo is stored locally
 
-    # print(f"[INFO] Loading model... ")
-    # ## loading the custom trained model
-    # # model =  torch.hub.load('ultralytics/yolov5', 'custom', path='last.pt',force_reload=True) ## if you want to download the git repo and then run the detection
-    # model =  torch.hub.load('/home/smi/FennecBot', 'custom', source ='local', path='1106_2_best.pt',force_reload=True) ### The repo is stored locally
+    classes = model.names ### class names in string
 
-    # classes = model.names ### class names in string
-
-    cap = cv2.VideoCapture('/dev/video0', cv2.CAP_V4L)
+    cap = cv2.VideoCapture(0)
+    # cap = cv2.VideoCapture('/dev/video0', cv2.CAP_V4L)
 
     while True:
         # start_time = time.time()
