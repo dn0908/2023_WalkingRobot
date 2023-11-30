@@ -63,21 +63,23 @@ while True :
     result, forward_sum, left_sum, right_sum = Image.set_path1(crop, 120)
     print('line result : ',result)
 
+
+    if flag == '1':
+         
+
+
     if result == 'forward':
         Motor.go_forward(100)
-
         if np.any(red_mask):
              Motor.stop()
-    
+             time.sleep(5)
+             
     if result == 'left':
         Motor.turn_left(100)
-
     if result == 'right':
         Motor.turn_right(100)
-
     if result == 'stop':
-        Motor.stop()
-    
+        Motor.stop()  
     if result == 'backward':
         Motor.go_backward(100)
 

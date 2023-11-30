@@ -4,7 +4,8 @@ global flag
 
 class Image_Processing():
     def __init__(self):
-        self.flag = 0
+        # self.flag = 0
+        print("")
 
     def first_nonzero(self, arr, axis, invalid_val=-1):
         arr = np.flipud(arr)
@@ -12,16 +13,16 @@ class Image_Processing():
         return np.where(mask.any(axis=axis), mask.argmax(axis=axis), invalid_val)
 
     # detect red
-    def red_image(self, image, red_min=140):
+    def red_image(image):
         # red_detection = 'no_red'
         hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)    
-        lower_range = np.array([red_min,red_min,0], dtype=np.uint8)
+        lower_range = np.array([150,150,0], dtype=np.uint8)
         upper_range = np.array([180,255,255], dtype=np.uint8)
         red_mask = cv2.inRange(hsv, lower_range, upper_range)
         
         min_pool=block_reduce(red_mask, block_size=(2,2), func=np.min)
         
-        return red_mask #, min_pool
+        return red_mask, min_pool
 
     def crop(self, img,dx,dy):
         y,x,z = img.shape
@@ -42,7 +43,7 @@ class Image_Processing():
     flag = 1 for stopsign detection
     # flag = 2 for ar marker detection
     '''
-    def set_path1(self, image, upper_limit, fixed_center = 'False'):
+    def set_path1(self, flag, image, upper_limit, fixed_center = 'False'):
         # img = np.array(image)
         height, width = image.shape[:2]
         print(height, width)
@@ -89,7 +90,7 @@ class Image_Processing():
         forward_sum = np.sum(white_distance[center-10:center+10])
         # print("left sum : %f   right sum : %f   forward sum : %f", left_sum, right_sum, forward_sum)
         
-        if self.flag == 0:
+        if flag == 0:
             if left_sum > right_sum + 600: 
                 result = 'left'
             elif left_sum < right_sum - 600:
@@ -106,7 +107,7 @@ class Image_Processing():
             else: 
                 result = 'backward'
     #     
-        if self.flag == 1:
+        if flag == 1:
             if left_sum > right_sum + 600: 
                     result = 'left'
             elif left_sum < right_sum - 600:
@@ -123,7 +124,7 @@ class Image_Processing():
             else: 
                 result = 'backward'
         
-        if self.flag == 2:
+        if flag == 2:
             if left_sum > right_sum + 600: 
                     result = 'left'
             elif left_sum < right_sum - 600:
@@ -195,16 +196,23 @@ if __name__ == "__main__":
             print('failed to grab frame ...')
             continue
         crop = Image.crop(frame,160,120)
-        white_mask = Image.select_white(crop, 100)
-        red_mask = Image.red_image(crop, 130)
-        
+        white_mask = Image.select_white(crop, 140)
         # height, width = white_mask.shape
         # center = int(width/2)
         result, forward_sum, left_sum, right_sum = Image.set_path1(crop, 120)
         print('result : ',result)
-        #ctrl_output = Image.ctrl(result, forward_sum, left_sum, right_sum)
+        if result == 'forward':
+            Motor.go_forward(100)
+        if result == 'left':
+            Motor.turn_left(100)
+        if result == 'right':
+            Motor.turn_right(100)
+        if result == 'stop':
+            Motor.stop()  
+        if result == 'backward':
+            Motor.go_backward(100)
+        # ctrl_output = Image.ctrl(result, forward_sum, left_sum, right_sum)
         #print("RESULT :      ",ctrl_output)
-        cv2.imshow('red test', red_mask)
         cv2.imshow('white test', white_mask)
         cv2.imshow('original', crop)
         if cv2.waitKey(500) == ord('q'):
