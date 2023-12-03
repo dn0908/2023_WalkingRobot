@@ -43,12 +43,12 @@ while True :
     cv2.imshow('AR Frame', AR_frame)
 
     Stop_frame = frame
-    red_mask = Image.red_image(Stop_frame, 130)
-    if np.any(red_mask):
-        print("STOP detected, ROBOT STOPPED !")
-        text = "STOP DETECTED"
-        Motor.stop()
-        cv2.putText(Stop_frame, text, (10, 140), cv2.FONT_HERSHEY_SIMPLEX,1, (255,255,255), 2)
+    red_mask = Image.red_image(Stop_frame)
+    #if np.any(red_mask):
+        #print("STOP detected, ROBOT STOPPED !")
+        #text = "STOP DETECTED"
+        
+        #cv2.putText(Stop_frame, text, (10, 140), cv2.FONT_HERSHEY_SIMPLEX,1, (255,255,255), 2)
     cv2.imshow('Stop frame', Stop_frame)
     # Stop.detect_stop(Stop_frame)
     # if stop_flag == 1:
@@ -60,28 +60,23 @@ while True :
     white_mask = Image.select_white(crop, 90)
     # height, width = white_mask.shape
     # center = int(width/2)
-    result, forward_sum, left_sum, right_sum = Image.set_path1(crop, 120)
+    result, forward_sum, left_sum, right_sum = Image.set_path1(0,crop, 120)
     print('line result : ',result)
-
-
-    if flag == '1':
-         
-
-
-    if result == 'forward':
-        Motor.go_forward(100)
-        if np.any(red_mask):
-             Motor.stop()
-             time.sleep(5)
+    
+    #if result == 'forward':
+    #    Motor.go_forward(100)
+    #    if np.any(red_mask):
+    #         Motor.stop()
+    #         time.sleep(5)
              
-    if result == 'left':
-        Motor.turn_left(100)
-    if result == 'right':
-        Motor.turn_right(100)
-    if result == 'stop':
-        Motor.stop()  
-    if result == 'backward':
-        Motor.go_backward(100)
+    #if result == 'left':
+     #   Motor.turn_left(100)
+    #if result == 'right':
+     #   Motor.turn_right(100)
+    #if result == 'stop':
+     #   Motor.stop()  
+    #if result == 'backward':
+     #   Motor.go_backward(100)
 
     #ctrl_output = Image.ctrl(result, forward_sum, left_sum, right_sum)
     #print("RESULT :      ",ctrl_output)
