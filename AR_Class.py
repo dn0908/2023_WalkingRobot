@@ -24,7 +24,7 @@ class AR:
         
 if __name__ == '__main__':
     AR = AR()
-    cap = cv2.VideoCapture('/dev/video0', cv2.CAP_V4L)
+    cap = cv2.VideoCapture(0)
     if cap.isOpened():  # try to get the first frame
         frame_captured, frame = cap.read()
     while frame_captured:

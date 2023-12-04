@@ -46,18 +46,18 @@ class Image_Processing():
     def set_path1(self, flag, image, upper_limit, fixed_center = 'False'):
         # img = np.array(image)
         height, width = image.shape[:2]
-        print(height, width)
+        # print(height, width)
         # height, width = image.shape # shape of array ex) 240,320
-        height = height-1 # array starts from 0, so the last num is 319, not 320
-        width = width-1
+        height = 119 # array starts from 0, so the last num is 319, not 320
+        width = 159
         center=int(width/2)
         left=0
         right=width
 
         # for integration of left, right road
         white_distance = np.zeros(width)
-        delta_w = 8
-        delta_h = 3  
+        delta_w = 10
+        delta_h = 5
         
         if not fixed_center: 
             #finding first white pixel in the lowest row and reconfiguring center pixel position
@@ -77,30 +77,36 @@ class Image_Processing():
                 # if image[height-j*delta_h, center-i*delta_w]>200 or j==int(upper_limit/delta_h)-1:
                 if np.all(image[height-j*delta_h, center-i*delta_w]>200) or j==int(upper_limit/delta_h)-1:  
                     white_distance[center-i*delta_w] = j*delta_h
+                    # print('white distance :', white_distance)
                     break        
         for i in range(int((right-center-1)/delta_w)+1):
             for j in range(int(upper_limit/delta_h)):
                 # if image[height-j*delta_h, center+1+i*delta_w] > 200 or j==int(upper_limit/delta_h)-1:
                 if np.all(image[height-j*delta_h, center+1+i*delta_w] > 200) or j==int(upper_limit/delta_h)-1:
                     white_distance[center+1+i*delta_w] = j*delta_h
+                    # print('white distance :', white_distance)
                     break
         
-        left_sum = np.sum(white_distance[left:center]+1)
-        right_sum = np.sum(white_distance[center:right]) 
-        forward_sum = np.sum(white_distance[center-10:center+10])
-        # print("left sum : %f   right sum : %f   forward sum : %f", left_sum, right_sum, forward_sum)
-        
+        # left_sum = np.sum(white_distance[left:center]+1)
+        # right_sum = np.sum(white_distance[center:right]) 
+
+        right_sum = np.sum(white_distance[left:center]+1)
+        left_sum = np.sum(white_distance[center:right]) 
+
+        forward_sum = np.sum(white_distance[center-20:center+20])
+        # print("--- left sum :",left_sum, 'right sum :', right_sum, 'forward sum :',forward_sum)
+
         if flag == 0:
-            if left_sum > right_sum + 600: 
+            if left_sum > right_sum + 150: #600
                 result = 'left'
             elif left_sum < right_sum - 600:
                 result = 'right'
-            elif forward_sum > 260:
+            elif forward_sum > 260: #260
                 result = 'forward'
-            elif forward_sum > 100: 
-                if left_sum > right_sum + 100:
+            elif forward_sum > 100: #100
+                if left_sum > right_sum + 100: #100
                     result = 'left'
-                elif left_sum < right_sum - 100:
+                elif left_sum < right_sum - 100: #100
                     result = 'right'
                 else:
                     result = 'forward'
@@ -202,18 +208,19 @@ if __name__ == "__main__":
             white_mask = Image.select_white(crop, 120)
             # height, width = white_mask.shape
             # center = int(width/2)
-            result, forward_sum, left_sum, right_sum = Image.set_path1(0,crop, 100)
-            print('result : ',result, "left sum", left_sum, 'right_sum', right_sum)
-        #if result == 'forward':
-        #    Motor.go_forward(100)
-        #if result == 'left':
-        #    Motor.turn_left(100)
-        #if result == 'right':
-        #    Motor.turn_right(100)
-        #if result == 'stop':
-        #    Motor.stop()  
-        #if result == 'backward':
-        #    Motor.go_backward(100)
+            result, forward_sum, left_sum, right_sum = Image.set_path1(0,crop, 120)
+            print('result : ',result, "forward_sum", forward_sum, "left_sum", left_sum, 'right_sum', right_sum)
+
+            if result == 'forward':
+                Motor.go_forward(100)
+            if result == 'left':
+                Motor.turn_left(100)
+            if result == 'right':
+                Motor.turn_right(100)
+            if result == 'stop':
+                Motor.stop()  
+            if result == 'backward':
+                Motor.go_backward(100)
         #ctrl_output = Image.ctrl(result, forward_sum, left_sum, right_sum)
         #print("RESULT :      ",ctrl_output)
         cv2.imshow('white test', white_mask)
