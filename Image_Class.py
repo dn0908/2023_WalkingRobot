@@ -75,29 +75,23 @@ class Image_Processing():
         for i in range(int((center-left)/delta_w)+1):
             for j in range(int(upper_limit/delta_h)):
                 # if image[height-j*delta_h, center-i*delta_w]>200 or j==int(upper_limit/delta_h)-1:
-                if np.all(image[height-j*delta_h, center-i*delta_w]>200) or j==int(upper_limit/delta_h)-1:  
+                if np.any(image[height-j*delta_h, center-i*delta_w]>200) or j==int(upper_limit/delta_h)-1:  
                     white_distance[center-i*delta_w] = j*delta_h
-                    # print('white distance :', white_distance)
                     break        
         for i in range(int((right-center-1)/delta_w)+1):
             for j in range(int(upper_limit/delta_h)):
                 # if image[height-j*delta_h, center+1+i*delta_w] > 200 or j==int(upper_limit/delta_h)-1:
-                if np.all(image[height-j*delta_h, center+1+i*delta_w] > 200) or j==int(upper_limit/delta_h)-1:
+                if np.any(image[height-j*delta_h, center+1+i*delta_w] > 200) or j==int(upper_limit/delta_h)-1:
                     white_distance[center+1+i*delta_w] = j*delta_h
-                    # print('white distance :', white_distance)
                     break
         
-        # left_sum = np.sum(white_distance[left:center]+1)
-        # right_sum = np.sum(white_distance[center:right]) 
-
-        right_sum = np.sum(white_distance[left:center]+1)
-        left_sum = np.sum(white_distance[center:right]) 
-
+        left_sum = np.sum(white_distance[left:center]+1)
+        right_sum = np.sum(white_distance[center:right]) 
         forward_sum = np.sum(white_distance[center-20:center+20])
         # print("--- left sum :",left_sum, 'right sum :', right_sum, 'forward sum :',forward_sum)
 
         if flag == 0:
-            if left_sum > right_sum + 150: #600
+            if left_sum > right_sum + 600: #600
                 result = 'left'
             elif left_sum < right_sum - 600:
                 result = 'right'
