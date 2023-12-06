@@ -77,6 +77,7 @@ if __name__ == "__main__":
     print('Go')
     Motor_Control.go_forward(80)
     time.sleep(5)
+    print('back')
     Motor_Control.go_backward(100)
     time.sleep(5)
     Motor_Control.stop()

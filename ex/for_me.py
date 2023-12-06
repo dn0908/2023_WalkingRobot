@@ -1,5 +1,4 @@
-# 10th EDISON Computation Design Challange TEAM ROBOIN 1
-# I.H. KEE, Y.W. lEE, I.W. OH
+from imports import *
 import math
 import RPi.GPIO as GPIO
 import cv2
@@ -10,10 +9,9 @@ import time
 from skimage.measure import block_reduce
 # from picamera import PiCamera
 # from picamera.array import PiRGBArray
-
-from __future__ import print_function
-import sys
-sys.path.insert(0, '/home/diana/2023_WalkingRobot/ar_detection')
+from Motor_Class import Motor_Control
+Motor = Motor_Control()
+from AR_Class import 
 
 try:
 	import cv2
@@ -133,6 +131,7 @@ def detect_stop(image):
 def detect_marker(forward):
     # flag################################################################## 
     markers = detect_markers(realar)
+    AR.detect(frame)
     # if markers is True:
     #     flag =+ 1
     for marker in markers:
@@ -443,14 +442,17 @@ output_min = 3
 # LOOPTIME = 1/15
 
 
-camera = PiCamera()
-camera.resolution = (320, 240)
-camera.framerate = 45
-camera.hflip = True
-camera.vflip = True
-rawCapture = PiRGBArray(camera, size=(320,240))
-# camera.start_recording('video.h264') # start recording
-time.sleep(.1)
+# camera = PiCamera()
+# camera.resolution = (320, 240)
+# camera.framerate = 45
+# camera.hflip = True
+# camera.vflip = True
+# rawCapture = PiRGBArray(camera, size=(320,240))
+
+cap = cv2.VideoCapture(0)
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
+time.sleep(0.1)
 
 '''
 flag = 0 for just driving 
@@ -464,102 +466,109 @@ flag = 0
 # =====================================================================================
 # =============================          MAIN           ===============================
 # =====================================================================================
-for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):    
-    st0 = time.time()
-    image = frame.array
+while True :
+    ret, frame = cap.read()
+    if not ret:
+        print('failed to grab frame ...')
+        continue
+    if ret:
+        crop = crop(frame,160,120)   
+        st0 = time.time()
+        # image = frame.array
+        image = frame
     
-    real = crop(image,160,120)
-    realar = crop(image, 160, 180)
-#     if flag == 0:
-    
-#     st1 = time.time()
-#     print('get_image: {}'.format(st1-st0))
-    red = red_image(real)
-#     st2 = time.time()
-#     print('red_image: {}'.format(st2-st1))
-    redcnt = np.count_nonzero(red)
-    print('how_many_redcnt: {}'.format(redcnt))
-#     st3 = time.time()
-#     print('redcnt: {}'.format(st3-st2))
-    #print('redcnt: {}'.format(redcnt))
-    #print('flag: {}'.format(flag))
-    pos1=[]
-    if redcnt >= 9 :
-        if flag == 0:
-            detect_stop(image)
-#     st4 = time.time()
-#     print('detect_stop: {}'.format(st4-st3))
+        real = crop(image,160,120)
+        realar = crop(image, 160, 180)
+    #     if flag == 0:
         
-    
-#     st5 = time.time()
-#     print('mrk: {}'.format(st5-st4))
-
-    
-    masked_image = select_white(real,140)
-    height, width = masked_image.shape
-    center=int(width/2)
-    
-#     st6 = time.time()
-#     print('masked+height+center: {}'.format(st6-st5))
-  
-    a=set_path1(masked_image,120)
-#     st7 = time.time()
-#     print('set_path: {}'.format(st7-st6))
-    if flag == 1:
-        detect_marker(a[1])
-    
-    b = a[0]
-    
-    ctrl_output = ctrl(b, a[1], a[2], a[3])
-#     st8 = time.time()
-#     print('ctrl: {}'.format(st8-st7))
-    print(b, a[1], a[2], a[3], 'redcnt: {}'.format(redcnt),'ctrl_output: {}'.format(ctrl_output), 'flag: {}'.format(flag))    
-
-    # if b == 'forward':
-    #     forward(fullspeed)
-    # elif b == 'left':
-    #     left(fullspeed-10,0)
-    # elif b == 'right':
-    #     right(fullspeed-10,0)
-    # elif b == 'backward':
-    #     backward()
-    # else:
-    #     stop()
-
-    # P control added
-    if b == 'forward':
-        forward(fullspeed)
-    elif b == 'left':
-        left(fullspeed-3, fullspeed-ctrl_output)
-    elif b == 'right':
-        right(fullspeed-3, ctrl_output)
-    elif b == 'backward':
-        backward()
-    elif b == 'stop':
-        forward(fullspeed-10)
-        time.sleep(0.5)
-        parking()
-        stop5()
+    #     st1 = time.time()
+    #     print('get_image: {}'.format(st1-st0))
+        red = red_image(real)
+    #     st2 = time.time()
+    #     print('red_image: {}'.format(st2-st1))
+        redcnt = np.count_nonzero(red)
+        print('how_many_redcnt: {}'.format(redcnt))
+    #     st3 = time.time()
+    #     print('redcnt: {}'.format(st3-st2))
+        #print('redcnt: {}'.format(redcnt))
+        #print('flag: {}'.format(flag))
+        pos1=[]
+        if redcnt >= 9 :
+            if flag == 0:
+                detect_stop(image)
+    #     st4 = time.time()
+    #     print('detect_stop: {}'.format(st4-st3))
+            
         
-#     st9 = time.time()
-#     print('decision: {}'.format(st9-st8))
-    
-    font = cv2.FONT_HERSHEY_SIMPLEX
-    text1 = 'decision ' + str(b)
-    cv2.putText(masked_image, text1, (10,20), font, 0.5, (255, 255, 255), 1)
-    
-    
-                        
-    cv2.imshow('image', image)
-#     cv2.imshow("Masked", masked_image)
-#     cv2.imshow('red', red)
-    st10 = time.time()
-#     print('imshow: {}'.format(st10-st9))
-    print('total: {}'.format(st10-st0))
-    
-    key = cv2.waitKey(1) & 0xFF
-    rawCapture.truncate(0)
-    if key == ord('q'):
-        break
+    #     st5 = time.time()
+    #     print('mrk: {}'.format(st5-st4))
 
-# camera.stop_recording()
+        
+        masked_image = select_white(real,140)
+        height, width = masked_image.shape
+        center=int(width/2)
+        
+    #     st6 = time.time()
+    #     print('masked+height+center: {}'.format(st6-st5))
+    
+        a=set_path1(masked_image,120)
+    #     st7 = time.time()
+    #     print('set_path: {}'.format(st7-st6))
+        if flag == 1:
+            detect_marker(a[1])
+        
+        b = a[0]
+        
+        ctrl_output = ctrl(b, a[1], a[2], a[3])
+    #     st8 = time.time()
+    #     print('ctrl: {}'.format(st8-st7))
+        print(b, a[1], a[2], a[3], 'redcnt: {}'.format(redcnt),'ctrl_output: {}'.format(ctrl_output), 'flag: {}'.format(flag))    
+
+        # if b == 'forward':
+        #     forward(fullspeed)
+        # elif b == 'left':
+        #     left(fullspeed-10,0)
+        # elif b == 'right':
+        #     right(fullspeed-10,0)
+        # elif b == 'backward':
+        #     backward()
+        # else:
+        #     stop()
+
+        # P control added
+        if b == 'forward':
+            forward(fullspeed)
+        elif b == 'left':
+            left(fullspeed-3, fullspeed-ctrl_output)
+        elif b == 'right':
+            right(fullspeed-3, ctrl_output)
+        elif b == 'backward':
+            backward()
+        elif b == 'stop':
+            forward(fullspeed-10)
+            time.sleep(0.5)
+            parking()
+            stop5()
+            
+    #     st9 = time.time()
+    #     print('decision: {}'.format(st9-st8))
+        
+        font = cv2.FONT_HERSHEY_SIMPLEX
+        text1 = 'decision ' + str(b)
+        cv2.putText(masked_image, text1, (10,20), font, 0.5, (255, 255, 255), 1)
+        
+        
+                            
+        cv2.imshow('image', image)
+    #     cv2.imshow("Masked", masked_image)
+    #     cv2.imshow('red', red)
+        st10 = time.time()
+    #     print('imshow: {}'.format(st10-st9))
+        print('total: {}'.format(st10-st0))
+        
+        key = cv2.waitKey(1) & 0xFF
+        if cv2.waitKey(500) == ord('q'):
+            Motor.stop()
+            break
+    cap.release()
+    cv2.destroyAllWindows()

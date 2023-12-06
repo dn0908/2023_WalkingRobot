@@ -107,8 +107,9 @@ if __name__ == "__main__":
             print('failed to grab frame ...')
             continue
         if ret:
-            crop = Image.crop(frame,120,160)
-            white_mask = Image.select_white(crop, 120)
+            # crop = Image.crop(frame,120,160)
+            crop = frame
+            white_mask = Image.select_white(crop, 90)
             # height, width = white_mask.shape
             # center = int(width/2)
             result, forward_sum, left_sum, right_sum = Image.set_path1(crop, 120)

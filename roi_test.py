@@ -1,7 +1,10 @@
+from imports import *
 import cv2
 import numpy as np
 from skimage.measure import block_reduce
 
+from Motor_Class import Motor_Control
+Motor = Motor_Control()
 
 vidcap = cv2.VideoCapture(0)
 success, image = vidcap.read()
@@ -54,25 +57,41 @@ while success:
     
     # Matrix to warp the image for birdseye window
     matrix = cv2.getPerspectiveTransform(pts1, pts2)
-    white_mask = select_white(frame, 100) # white mask
+    white_mask = select_white(frame, 80) # white mask
     transformed_frame = cv2.warpPerspective(white_mask, matrix, (640,480))
 
-    white_left = crop_left(transformed_frame, 100, 480)
-    white_right = crop_right(transformed_frame, 380, 480)
+    white_left = crop_left(transformed_frame, 80, 480)
+    white_right = crop_right(transformed_frame, 400, 480)
     white_front = crop_front(transformed_frame)
 
-    left_sum = int(np.sum(white_left) / 1000)
-    right_sum = int(np.sum(white_right) / 1000)
-    front_sum = int(np.sum(white_front) / 1000)
+    left_sum = int(np.sum(white_left) / 10000)
+    right_sum = int(np.sum(white_right) / 10000)
+    front_sum = int(np.sum(white_front) / 10000)
 
     print('left sum :', left_sum, 'right sum :', right_sum, 'front sum :', front_sum)
     
+    if left_sum > 0 and right_sum > 0:
+        print('forward')
+        Motor.go_forward(100)
+    if left_sum < 10 and right_sum < 10:
+        Motor.go_forward(100)
+
+
+    elif right_sum < 10:
+        print('right')
+        Motor.turn_left(100)
+
+    elif left_sum < 10:
+        print('left')
+        Motor.turn_right(100)
+
+    if cv2.waitKey(10) == 27: #esc
+        Motor.stop()
+        break
         
     cv2.imshow("Original", frame)
-    cv2.imshow("Bird's Eye View", white_mask)
-    cv2.imshow("White LEFT", white_left)
-    cv2.imshow("white RIGHT", white_right)
-    cv2.imshow("white FRONT", white_front)
+    cv2.imshow("Bird's Eye View", transformed_frame)
+    # cv2.imshow("White LEFT", white_left)
+    # cv2.imshow("white RIGHT", white_right)
+    # cv2.imshow("white FRONT", white_front)
 
-    if cv2.waitKey(10) == 27:
-        break

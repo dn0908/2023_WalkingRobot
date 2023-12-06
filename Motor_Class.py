@@ -36,13 +36,13 @@ class Motor_Control:
         # L +
         GPIO.output(self.motor1A, GPIO.LOW)
         GPIO.output(self.motor1B, GPIO.HIGH)
-        # R -
+        # R 0
         GPIO.output(self.motor2A, GPIO.LOW)
-        GPIO.output(self.motor2B, GPIO.HIGH)
+        GPIO.output(self.motor2B, GPIO.LOW)
 
     def turn_right(self, speed=100):
-        # L -
-        GPIO.output(self.motor1A, GPIO.HIGH)
+        # L 0
+        GPIO.output(self.motor1A, GPIO.LOW)
         GPIO.output(self.motor1B, GPIO.LOW)
         # R +
         GPIO.output(self.motor2A, GPIO.HIGH)

@@ -43,7 +43,7 @@ class Image_Processing():
     flag = 1 for stopsign detection
     # flag = 2 for ar marker detection
     '''
-    def set_path1(self, flag, image, upper_limit, fixed_center = 'False'):
+    def set_path1(self, flag, image, upper_limit, fixed_center = 'True'):
         # img = np.array(image)
         height, width = image.shape[:2]
         # print(height, width)
@@ -56,7 +56,7 @@ class Image_Processing():
 
         # for integration of left, right road
         white_distance = np.zeros(width)
-        delta_w = 10
+        delta_w = 8
         delta_h = 5
         
         if not fixed_center: 
@@ -87,23 +87,24 @@ class Image_Processing():
         
         left_sum = np.sum(white_distance[left:center]+1)
         right_sum = np.sum(white_distance[center:right]) 
-        forward_sum = np.sum(white_distance[center-20:center+20])
+        forward_sum = np.sum(white_distance[center-10:center+10])
         # print("--- left sum :",left_sum, 'right sum :', right_sum, 'forward sum :',forward_sum)
+        right_sum = right_sum
 
         if flag == 0:
-            if left_sum > right_sum + 600: #600
+            if left_sum > right_sum - 100: #600
                 result = 'left'
-            elif left_sum < right_sum - 600:
+            elif left_sum < right_sum - 200:
                 result = 'right'
-            elif forward_sum > 260: #260
+            elif forward_sum > 350: #260
                 result = 'forward'
-            elif forward_sum > 100: #100
-                if left_sum > right_sum + 100: #100
-                    result = 'left'
-                elif left_sum < right_sum - 100: #100
-                    result = 'right'
-                else:
-                    result = 'forward'
+            # elif forward_sum > 100: #100
+            #     if left_sum > right_sum + 100: #100
+            #         result = 'left'
+            #     elif left_sum < right_sum - 100: #100
+            #         result = 'right'
+            #     else:
+            #         result = 'forward'
             else: 
                 result = 'backward'
     #     
@@ -147,37 +148,43 @@ class Image_Processing():
     # =====================================================================================
     # P control -> constrained P control mod. needed
     # output is amount of dutycycle to reduce -> (fullspeed - output) is needed
-    # def ctrl(self, result, forward_sum, left_sum, right_sum):  
+    def ctrl(self, result, forward_sum, left_sum, right_sum):  
 
-    #     global KP
-    #     global KI
-    #     global KD
-    #     global limit
-    #     global output_min
+        global KP
+        global KI
+        global KD
+        global limit
+        global output_min
 
-    #     if result == 'left':
-    #         err = left_sum - right_sum
-    #     elif result == 'right':
-    #         err = right_sum - left_sum
-    #     else:
-    #         err = 0
-            
-    #     P_err = KP * err
-    #     I_err += KI * ((err + pre_err) / 2) * LOOPTIME
-    #     D_err = KD * (err - pre_err) / LOOPTIME
-    #     if (I_err > I_err_limit) :
-    #         I_err = I_err_limit
-    #     if (I_err < -I_err_limit):
-    #         I_err = -I_err_limit
-    #     output = abs(P_err + I_err + D_err)
-    #     output = abs(P_err)
+        KP = 0.15
+        KI = 0
+        KD = 0
+        limit = 20
+        output_min = 3
 
-    #     if output >= limit :
-    #         output = limit
-    #     if output < output_min:
-    #         output = output_min
+        if result == 'left':
+            err = left_sum - right_sum
+        elif result == 'right':
+            err = right_sum - left_sum
+        else:
+            err = 0
 
-    #     return output
+        P_err = KP * err
+        # I_err += KI * ((err + pre_err) / 2) * LOOPTIME
+        # D_err = KD * (err - pre_err) / LOOPTIME
+        # if (I_err > I_err_limit) :
+        #     I_err = I_err_limit
+        # if (I_err < -I_err_limit):
+        #     I_err = -I_err_limit
+        # output = abs(P_err + I_err + D_err)
+        output = abs(P_err)
+
+        if output >= limit :
+            output = limit
+        if output < output_min:
+            output = output_min
+
+        return output
     
 if __name__ == "__main__":
     #flag =1
@@ -199,11 +206,13 @@ if __name__ == "__main__":
             continue
         if ret:
             crop = Image.crop(frame,160,120)
-            white_mask = Image.select_white(crop, 120)
+            white_mask = Image.select_white(crop, 80)
             # height, width = white_mask.shape
             # center = int(width/2)
             result, forward_sum, left_sum, right_sum = Image.set_path1(0,crop, 120)
             print('result : ',result, "forward_sum", forward_sum, "left_sum", left_sum, 'right_sum', right_sum)
+
+            control_output = Image.ctrl(result, forward_sum, left_sum, right_sum)
 
             if result == 'forward':
                 Motor.go_forward(100)
@@ -218,7 +227,7 @@ if __name__ == "__main__":
         #ctrl_output = Image.ctrl(result, forward_sum, left_sum, right_sum)
         #print("RESULT :      ",ctrl_output)
         cv2.imshow('white test', white_mask)
-        cv2.imshow('original', crop)
+        # cv2.imshow('original', crop)
         if cv2.waitKey(500) == ord('q'):
             Motor.stop()
             break
