@@ -81,6 +81,7 @@ def detect_markers(img):
         dtype='float32')
 
     markers_list = []
+    marker_ID = ""
     for contour in contours:
         approx_curve = cv2.approxPolyDP(contour, len(contour) * 0.01, True)
         if not (len(approx_curve) == 4 and cv2.isContourConvex(approx_curve)):
@@ -111,7 +112,9 @@ def detect_markers(img):
             marker = validate_and_turn(marker)
             hamming_code = extract_hamming_code(marker)
             marker_id = int(decode(hamming_code), 2)
+            marker_ID = marker_id
             markers_list.append(HammingMarker(id=marker_id, contours=approx_curve))
+            
         except ValueError:
             continue
-    return markers_list
+    return markers_list, marker_ID

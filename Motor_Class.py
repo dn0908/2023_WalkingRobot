@@ -36,13 +36,21 @@ class Motor_Control:
         # L +
         GPIO.output(self.motor1A, GPIO.LOW)
         GPIO.output(self.motor1B, GPIO.HIGH)
+        # R -
+        GPIO.output(self.motor2A, GPIO.LOW)
+        GPIO.output(self.motor2B, GPIO.HIGH)
+
+    def u_turn(self, speed=100):
+        # L +
+        GPIO.output(self.motor1A, GPIO.LOW)
+        GPIO.output(self.motor1B, GPIO.HIGH)
         # R 0
         GPIO.output(self.motor2A, GPIO.LOW)
-        GPIO.output(self.motor2B, GPIO.LOW)
+        GPIO.output(self.motor2B, GPIO.HIGH)
 
     def turn_right(self, speed=100):
-        # L 0
-        GPIO.output(self.motor1A, GPIO.LOW)
+        # L -
+        GPIO.output(self.motor1A, GPIO.HIGH)
         GPIO.output(self.motor1B, GPIO.LOW)
         # R +
         GPIO.output(self.motor2A, GPIO.HIGH)
@@ -62,11 +70,11 @@ class Motor_Control:
 
 if __name__ == "__main__":
     Motor_Control = Motor_Control()
-    print('Go')
-    Motor_Control.go_forward(80)
-    time.sleep(5)
-    Motor_Control.go_backward(100)
-    time.sleep(5)
+    # print('Go')
+    # Motor_Control.go_forward(80)
+    # time.sleep(5)
+    # Motor_Control.go_backward(100)
+    # time.sleep(5)
     # print('Back')
     # Motor_Control.go_backward(100)
     # time.sleep(5)

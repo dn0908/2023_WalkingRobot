@@ -36,6 +36,13 @@ def crop_front(img):
     img = img[starty:y,320-dx:320+dx]
     return img
 
+def crop(img, startx, starty, dx,dy):
+    # y,x = img.shape
+    # startx = x//2-(dx)
+    # starty = y-(dy)
+    crop_img = img[starty:starty+dy,startx:startx+dx]
+    return crop_img
+
 while success:
     success, image = vidcap.read()
     frame = cv2.resize(image, (640,480))
@@ -60,9 +67,14 @@ while success:
     white_mask = select_white(frame, 80) # white mask
     transformed_frame = cv2.warpPerspective(white_mask, matrix, (640,480))
 
-    white_left = crop_left(transformed_frame, 80, 480)
-    white_right = crop_right(transformed_frame, 400, 480)
-    white_front = crop_front(transformed_frame)
+    # white_left = crop_left(transformed_frame, 50, 480)
+    # white_right = crop_right(transformed_frame, 430, 480)
+    # white_front = crop_front(transformed_frame)
+
+    # def crop(img, startx, starty, dx,dy):
+    white_left = crop(white_mask, 0, 340, 100, 480-340)
+    white_right = crop(white_mask, 585, 340, 640-585, 480-340)
+    white_front = crop(white_mask, 200, 355, 300, 40)
 
     left_sum = int(np.sum(white_left) / 10000)
     right_sum = int(np.sum(white_right) / 10000)
@@ -70,28 +82,32 @@ while success:
 
     print('left sum :', left_sum, 'right sum :', right_sum, 'front sum :', front_sum)
     
-    if left_sum > 0 and right_sum > 0:
+    if left_sum > 5 and right_sum > 5:
         print('forward')
         Motor.go_forward(100)
+
     if left_sum < 10 and right_sum < 10:
         Motor.go_forward(100)
 
-
-    elif right_sum < 10:
+    elif right_sum < 5:
         print('right')
         Motor.turn_left(100)
 
-    elif left_sum < 10:
+    elif left_sum < 5:
         print('left')
         Motor.turn_right(100)
+    elif front_sum > 100 and left_sum > 5 and right_sum >5 :
+        print('Uturn')
+        Motor.turn_left(100)
 
     if cv2.waitKey(10) == 27: #esc
         Motor.stop()
         break
         
-    cv2.imshow("Original", frame)
-    cv2.imshow("Bird's Eye View", transformed_frame)
-    # cv2.imshow("White LEFT", white_left)
-    # cv2.imshow("white RIGHT", white_right)
-    # cv2.imshow("white FRONT", white_front)
+    # cv2.imshow("Original", frame)
+    cv2.imshow("white mask", white_mask)
+    # cv2.imshow("Bird's Eye View", transformed_frame)
+    cv2.imshow("White LEFT", white_left)
+    cv2.imshow("white RIGHT", white_right)
+    cv2.imshow("white FRONT", white_front)
 

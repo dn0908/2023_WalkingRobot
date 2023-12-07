@@ -72,6 +72,48 @@ class Motor_Control:
         self.pwm_motor2.stop()
         GPIO.cleanup()
 
+    def forward(fullspeed):  
+        GPIO.output(motor1A, True)
+        GPIO.output(motor1B, False)
+        pwm1.ChangeDutyCycle(fullspeed) #left
+        GPIO.output(motor2A, True)
+        GPIO.output(motor2B, False)
+        pwm2.ChangeDutyCycle(fullspeed) #right
+
+    def backward():
+        GPIO.output(motor1A, False)
+        GPIO.output(motor1B, True)
+        pwm1.ChangeDutyCycle(50)
+        GPIO.output(motor2A, False)
+        GPIO.output(motor2B, True)
+        pwm2.ChangeDutyCycle(50)
+    
+    def right(fullspeed, ctrl):
+        GPIO.output(motor1A, True)
+        GPIO.output(motor1B, False)
+        pwm1.ChangeDutyCycle(fullspeed)
+        GPIO.output(motor2A, False)
+        GPIO.output(motor2B, True)
+        # pwm2.ChangeDutyCycle(0)
+        pwm2.ChangeDutyCycle(fullspeed-ctrl)
+            
+    def left(fullspeed, ctrl):
+        GPIO.output(motor1A, False)
+        GPIO.output(motor1B, True)
+        # pwm1.ChangeDutyCycle(0)
+
+        pwm1.ChangeDutyCycle(fullspeed-ctrl)
+        GPIO.output(motor2A, True)
+        GPIO.output(motor2B, False)
+        pwm2.ChangeDutyCycle(fullspeed)
+        
+    def stop():
+        GPIO.output(motor1A, False)
+        GPIO.output(motor1B, False)
+        GPIO.output(motor2A, False)
+        GPIO.output(motor2B, False)
+
+
 if __name__ == "__main__":
     Motor_Control = Motor_Control()
     print('Go')
