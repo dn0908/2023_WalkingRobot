@@ -128,6 +128,7 @@ while success:
     # FLAG 1 after obstacle, PART 1
     if flag ==1 :
         print("🚀   FLAG  1   🚀")
+        marker_ID = 0
         markers, marker_frame, marker_ID = AR.detect(frame)
         front_count =0
         if left_sum > 5 and right_sum > 5:

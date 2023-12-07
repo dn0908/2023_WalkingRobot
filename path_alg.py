@@ -13,16 +13,16 @@ class Image_Test():
         return np.where(mask.any(axis=axis), mask.argmax(axis=axis), invalid_val)
 
     # detect red
-    def red_image(self,image):
-        # red_detection = 'no_red'
-        hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)    
-        lower_range = np.array([150,150,0], dtype=np.uint8)
-        upper_range = np.array([180,255,255], dtype=np.uint8)
-        red_mask = cv2.inRange(hsv, lower_range, upper_range)
+    # def red_image(self,image):
+    #     # red_detection = 'no_red'
+    #     hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)    
+    #     lower_range = np.array([150,150,0], dtype=np.uint8)
+    #     upper_range = np.array([180,255,255], dtype=np.uint8)
+    #     red_mask = cv2.inRange(hsv, lower_range, upper_range)
         
-        min_pool=block_reduce(red_mask, block_size=(2,2), func=np.min)
+    #     min_pool=block_reduce(red_mask, block_size=(2,2), func=np.min)
         
-        return red_mask, min_pool
+    #     return red_mask, min_pool
 
     def crop(self, img,dx,dy):
         y,x,z = img.shape
